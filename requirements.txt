@@ -1,0 +1,7 @@
+django
+django-silk
+django-cors-headers
+Pillow
+django-debug-toolbar
+drf-yasg
+django-sslserver
