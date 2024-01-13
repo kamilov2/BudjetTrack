@@ -662,7 +662,7 @@ class LoginAPIView(APIView):
 
             user = authenticate(request, username=email, password=password)
             if user is None:
-                return Response({"error":"Username yoqi parol notogri."} , status=status.HTTP_400_BAD_REQUEST)
+                return Response({"error":"Username yoqi parol notogri."})
 
                 
 
