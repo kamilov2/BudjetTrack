@@ -674,7 +674,7 @@ class LoginAPIView(APIView):
                 response = Response(response_data, status=status.HTTP_200_OK)
                 return response
             else:
-                return Response({'error': 'Invalid credentials.'}, status=status.HTTP_401_UNAUTHORIZED)
+                return Response({'error': 'Username yoqi parol notogri.'}, status=status.HTTP_401_UNAUTHORIZED)
             
 
 
