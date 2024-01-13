@@ -162,7 +162,7 @@ class RegisterAPIView(APIView):
             password = serializer.validated_data['password']
 
             if User.objects.filter(email=email).exists():
-                return Response({'error': 'User with this email already exists.'}, status=status.HTTP_400_BAD_REQUEST)
+                return Response({'error': 'Bunday email royhatdan otgan.'}, status=status.HTTP_400_BAD_REQUEST)
 
             user = User.objects.create_user(username=email, email=email, password=password)
             profile = Profile.objects.create(user=user, email=email)
@@ -173,7 +173,7 @@ class RegisterAPIView(APIView):
                 profile_serializer = ProfileSerializer(profile)
                 return Response(profile_serializer.data, status=status.HTTP_201_CREATED)
             else:
-                return Response({'error': 'Failed to authenticate user.'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+                return Response({'error': 'Username yoqi parol notogri.'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
         return Response({'error': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
 
