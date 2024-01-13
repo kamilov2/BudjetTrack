@@ -33,6 +33,7 @@ secret_key.txt
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
+__pycache__
 *.pyc
 *.pyo
 *.pyd
@@ -66,3 +67,10 @@ Pipfile.lock
 
 # Ignore test database
 test_db.sqlite3
+
+# Ignore static files
+static/
+
+staticfiles/
+
+h.py
