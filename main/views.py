@@ -661,6 +661,10 @@ class LoginAPIView(APIView):
             password = serializer.validated_data['password']
 
             user = authenticate(request, username=email, password=password)
+            if user is None:
+                return Response({"error":"Username yoqi parol notogri."} , status=status.HTTP_400_BAD_REQUEST)
+
+                
 
             if user is not None:
                 login(request, user)
@@ -674,7 +678,7 @@ class LoginAPIView(APIView):
                 response = Response(response_data, status=status.HTTP_200_OK)
                 return response
             else:
-                return Response({'error': 'Username yoqi parol notogri.'}, status=status.HTTP_401_UNAUTHORIZED)
+                return Response({'error': 'Invalid credentials.'}, status=status.HTTP_401_UNAUTHORIZED)
             
 
 
