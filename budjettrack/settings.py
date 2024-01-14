@@ -141,8 +141,8 @@ SESSION_COOKIE_SAMESITE = 'Lax'
 
 ROOT_URLCONF = 'budjettrack.urls'
 
-EMAIL_HOST = 'simap.yandex.com'
-EMAIL_PORT = 993
+EMAIL_HOST = 'smtp.yandex.com'
+EMAIL_PORT = 587
 EMAIL_USE_TLS = False
 EMAIL_USE_SSL = True
 EMAIL_HOST_USER = 'about.uz@yandex.ru'
