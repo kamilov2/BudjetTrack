@@ -3,7 +3,7 @@ import random
 from django.core.mail import send_mail
 from django.conf import settings
 from django.shortcuts import get_object_or_404
-from .models import Profile  # Замените на ваш реальный путь к моделям
+from .models import Profile
 
 bot = telebot.TeleBot('6066460877:AAEbu-NZMCVsL74RJc7VgZ3SRxB8IzQ6Klk')
 
