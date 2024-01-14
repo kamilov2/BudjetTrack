@@ -142,8 +142,8 @@ SESSION_COOKIE_SAMESITE = 'Lax'
 ROOT_URLCONF = 'budjettrack.urls'
 
 EMAIL_HOST = 'smtp.yandex.com'
-EMAIL_PORT = 587
-EMAIL_USE_TLS = False
+EMAIL_PORT = 465
+EMAIL_USE_TLS = True
 EMAIL_USE_SSL = True
 EMAIL_HOST_USER = 'about.uz@yandex.ru'
 EMAIL_HOST_PASSWORD = 'pfjekzkkkiyqwbik'
