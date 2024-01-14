@@ -16,6 +16,8 @@ from django.conf import settings
 from django.core.mail import send_mail
 from django.utils.translation import gettext_lazy as _
 from django.urls import reverse
+import random
+import telebot
 from drf_yasg.utils import swagger_auto_schema
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponse
@@ -69,6 +71,9 @@ class LimitAPIView(generics.RetrieveUpdateAPIView):
                 return Response(serializer.data, status=status.HTTP_200_OK)
         except Exception as e:
             return Response({'error': f'Error {e}'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
+
+     
 
     @swagger_auto_schema(
         responses={
@@ -532,74 +537,6 @@ class AllExpenseAPIView(APIView):
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
-# class PasswordResetRequestView(generics.CreateAPIView):
-#     permission_classes = [AllowAny]
-#     serializer_class = PasswordResetSerializer
-
-#     def create(self, request, *args, **kwargs):
-#         serializer = self.get_serializer(data=request.data)
-#         serializer.is_valid(raise_exception=True)
-#         email = serializer.validated_data['email']
-
-#         try:
-#             profile = get_object_or_404(Profile, email=email)
-#             user = profile.user
-#         except Http404:
-#             logger.error(f"Profile not found for email: {email}")
-#             return Response({'detail': _('Profile not found')}, status=status.HTTP_404_NOT_FOUND)
-
-#         token = default_token_generator.make_token(user)
-
-#         reset_url_current_domain = reverse('password-reset-confirm', kwargs={
-#             'uidb64': urlsafe_base64_encode(force_bytes(user.pk)),
-#             'token': token,
-#         })
-
-#         reset_url_other_domain = "https://chikim.vercel.app" + reverse('password-reset-confirm', kwargs={
-#             'uidb64': urlsafe_base64_encode(force_bytes(user.pk)),
-#             'token': token,
-#         })
-
-#         subject = _('Password Reset')
-#         message = _(
-#             'Click the following link to reset your password on the current domain:\n{other_url}\n\n'
-#         ).format(other_url=reset_url_other_domain)
-
-#         from_email = settings.DEFAULT_FROM_EMAIL
-#         to_email = profile.email
-
-#         try:
-#             send_mail(subject, message, from_email, [to_email])
-#             logger.info(f"Password reset email sent to {to_email} successfully.")
-#         except Exception as e:
-#             logger.error(f"Failed to send password reset email to {to_email}. Error: {e}")
-#             return Response({'detail': _('Internal Server Error')}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
-#         return Response({'detail': _('Password reset email sent successfully')}, status=status.HTTP_200_OK)
-# class PasswordResetConfirmView(generics.UpdateAPIView):
-#     serializer_class = PasswordResetSerializer
-
-#     def update(self, request, *args, **kwargs):
-#         uidb64 = kwargs['uidb64']
-#         token = kwargs['token']
-
-#         try:
-#             uid = force_str(urlsafe_base64_decode(uidb64))
-#             user = User.objects.get(pk=uid)
-#         except (TypeError, ValueError, OverflowError, User.DoesNotExist):
-#             user = None
-
-#         if user is not None and default_token_generator.check_token(user, token):
-#             serializer = self.get_serializer(data=request.data)
-#             serializer.is_valid(raise_exception=True)
-
-#             new_password = serializer.validated_data['new_password']
-#             user.set_password(new_password)
-#             user.save()
-
-#             return Response({'detail': _('Password reset successfully')}, status=status.HTTP_200_OK)
-
-#         return Response({'detail': _('Invalid reset link')}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class LogoutAPIView(APIView):

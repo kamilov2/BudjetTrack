@@ -6,6 +6,7 @@ from django.contrib.auth.models import User
 class Profile(models.Model):
     user = models.OneToOneField(User, verbose_name="User", on_delete=models.CASCADE)
     email = models.EmailField(verbose_name="Email", default="" , unique=True)  
+    verification_code = models.CharField(max_length=4, blank=True, null=True)
     reg_date = models.DateField(verbose_name="Registration Date", auto_now_add=True)
 
     def __str__(self) -> str:

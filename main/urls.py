@@ -10,9 +10,8 @@ urlpatterns = [
     re_path(r'^expense/$', ExpenseAPIView.as_view(), name="expense"),
     re_path(r'^update_password/$', UpdatePasswordAPIView.as_view(), name="update_password"),
     re_path(r'^total_category/$' , ExpenseCategoryTotalAPIView.as_view() , name='expense_category'),
-    re_path(r'^all_expense', AllExpenseAPIView.as_view() , name="all_expense"),
-    # re_path(r'^password/reset/$', PasswordResetRequestView.as_view(), name='password-reset'),
-    # re_path(r'^password/reset/confirm/(?P<uidb64>[^/]+)/(?P<token>[^/]+)/$', PasswordResetConfirmView.as_view(), name='password-reset-confirm'),
+    re_path(r'^all_expense', AllExpenseAPIView.as_view() , name="all_expense"),   
     path('logout/', LogoutAPIView.as_view(), name='logout'),
     re_path(r'^login/$', LoginAPIView.as_view(), name="login"),
+
 ]

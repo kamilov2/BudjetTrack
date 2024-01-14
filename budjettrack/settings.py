@@ -25,7 +25,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-e27976r#a)tsmntkrn31+ieq9qo1c2epj5flz)eoi0ry7xz5y='
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ["*"]
 
@@ -102,10 +102,15 @@ REST_FRAMEWORK = {
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",  
-    "https://chikim.vercel.app"
+    "https://chikim.vercel.app",
+    "https://*.lhr.life"
 ]
 
-CORS_ALLOW_ALL_ORIGINS = False
+
+CSRF_TRUSTED_ORIGINS = ["https://*.lhr.life"]
+
+
+CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOW_METHODS = [
     'DELETE',
     'GET',
@@ -131,7 +136,6 @@ CORS_ALLOW_HEADERS = [
 
 CORS_ALLOW_CREDENTIALS = True
 
-CSRF_TRUSTED_ORIGINS = ["https://*.serveo.net"]
 
 SESSION_COOKIE_SAMESITE = 'Lax'
 

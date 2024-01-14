@@ -13,6 +13,7 @@ from drf_yasg import openapi
 from rest_framework import permissions
 from silk import views
 
+
 schema_view = get_schema_view(
     openapi.Info(
         title="Budjet Track",
@@ -33,6 +34,7 @@ urlpatterns = [
     path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
     path("silk/", include("silk.urls", namespace="silk")),
+
 ]
 urlpatterns += [
     path('', RedirectView.as_view(url='api/register', permanent=True)),
