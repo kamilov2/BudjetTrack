@@ -85,6 +85,3 @@ class ExpenseCategoryTotalSerializer(serializers.Serializer):
 
    
 
-
-class PasswordResetSerializer(serializers.Serializer):
-    email = serializers.EmailField()

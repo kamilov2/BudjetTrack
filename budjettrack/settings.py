@@ -27,8 +27,9 @@ SECRET_KEY = 'django-insecure-e27976r#a)tsmntkrn31+ieq9qo1c2epj5flz)eoi0ry7xz5y=
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["dj.inexoplast.uz", "https://dj.inexoplast.uz"]
+# ALLOWED_HOSTS = ["dj.inexoplast.uz", "https://dj.inexoplast.uz"]
 
+ALLOWED_HOSTS = ["*"]
 
 # Application definition
 
@@ -141,7 +142,7 @@ SESSION_COOKIE_SAMESITE = 'Lax'
 
 ROOT_URLCONF = 'budjettrack.urls'
 
-EMAIL_HOST = 'smtp.yandex.com'
+EMAIL_HOST = 'smtp.yandex.ru'
 EMAIL_PORT = 465
 EMAIL_USE_TLS = False
 EMAIL_USE_SSL = True
@@ -149,6 +150,7 @@ EMAIL_HOST_USER = 'about.uz@yandex.ru'
 EMAIL_HOST_PASSWORD = 'pfjekzkkkiyqwbik'
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 SERVER_EMAIL = EMAIL_HOST_USER
+
 
 TEMPLATES = [
     {

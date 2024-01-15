@@ -1,7 +1,13 @@
+import logging
+import traceback
+import random
 from django.shortcuts import render, get_object_or_404, get_list_or_404
 from rest_framework.views import APIView
 from rest_framework import generics, status
+from django.conf import settings
 from django.http import JsonResponse
+from django.core.mail import send_mail
+from django.conf import settings
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.authentication import TokenAuthentication
@@ -14,8 +20,6 @@ from drf_yasg import openapi
 from django.contrib.auth import update_session_auth_hash
 from django.db.models import Sum
 from datetime import datetime
-import logging
-import traceback
 from django.db.models import Count
 from django.utils import timezone
 from dateutil import parser
@@ -586,7 +590,7 @@ class LoginAPIView(APIView):
             email = serializer.validated_data['email']
             password = serializer.validated_data['password']
 
-            user = authenticate(request, username=email, password=password)
+            user = authenticate(request, username=email)
             if user is None:
                 return Response({"error":"Username yoqi parol notogri."})
 
@@ -607,3 +611,36 @@ class LoginAPIView(APIView):
                 return Response({'error': 'Invalid credentials.'}, status=status.HTTP_401_UNAUTHORIZED)
             
 
+class PasswordResetAPIView(APIView):
+    def post(self, request):
+        email = request.data.get('email')
+        verification_code = str(random.randint(1000, 9999))
+        user = authenticate(request, username=email)
+        auth_token, created = Token.objects.get_or_create(user=user)
+
+        try:
+            profile, created = Profile.objects.get_or_create(email=email)
+        except Profile.MultipleObjectsReturned:
+            return Response({'error': _('Найдено несколько профилей для этого адреса электронной почты.')}, status=400)
+        except Profile.DoesNotExist:
+            return Response({'error': _('Профиль не найден для этого адреса электронной почты.')}, status=404)
+
+        profile.verification_code = verification_code
+        profile.save()
+
+        subject = _('Код сброса пароля')
+        message_text = _('Ваш код подтверждения: {0}').format(verification_code)
+        from_email = settings.DEFAULT_FROM_EMAIL
+        to_email = email
+
+        try:
+            send_mail(subject, message_text, from_email, [to_email])
+        except Exception as e:
+            return Response({'error': _('Не удалось отправить электронное письмо. Пожалуйста, попробуйте снова позже.')}, status=500)
+
+        response_data = {
+            'status': 'ok',
+            'message': _('Электронное письмо успешно отправлено.'),
+            'token': auth_token.key  
+        }
+        return Response(response_data , status=status.HTTP_200_OK)
