@@ -621,9 +621,9 @@ class PasswordResetAPIView(APIView):
         try:
             profile, created = Profile.objects.get_or_create(email=email)
         except Profile.MultipleObjectsReturned:
-            return Response({'error': _('Найдено несколько профилей для этого адреса электронной почты.')}, status=400)
+            return Response({'error': _('Найдено несколько профилей для этого адреса электронной почты.')}, status=status.HTTP_400_BAD_REQUEST)
         except Profile.DoesNotExist:
-            return Response({'error': _('Профиль не найден для этого адреса электронной почты.')}, status=404)
+            return Response({'error': _('Профиль не найден для этого адреса электронной почты.')}, status=status.HTTP_404_NOT_FOUND)
 
         profile.verification_code = verification_code
         profile.save()
@@ -636,7 +636,7 @@ class PasswordResetAPIView(APIView):
         try:
             send_mail(subject, message_text, from_email, [to_email])
         except Exception as e:
-            return Response({'error': _('Не удалось отправить электронное письмо. Пожалуйста, попробуйте снова позже.')}, status=500)
+            return Response({'error': _('Не удалось отправить электронное письмо. Пожалуйста, попробуйте снова позже.')}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
         response_data = {
             'status': 'ok',
