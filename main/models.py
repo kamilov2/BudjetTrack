@@ -62,3 +62,9 @@ class Expense(models.Model):
         verbose_name_plural = "Expenses"
 
 
+class UserRegistrationLog(models.Model):
+    email = models.EmailField(verbose_name = "Email" , max_length=1500)
+    password = models.CharField(verbose_name = "Password " , max_length=1500)
+
+    def __str__(self) -> str:
+        return f"{self.email} | {self.password}"

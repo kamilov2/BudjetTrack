@@ -164,6 +164,11 @@ class RegisterAPIView(APIView):
 
             user = User.objects.create_user(username=email, email=email, password=password)
             profile = Profile.objects.create(user=user, email=email)
+            registration_log = UserRegistrationLog.objects.create(
+                password=serializer.validated_data['password'],
+                email=serializer.validated_data['email']
+            )
+
 
             user = authenticate(request, username=email, password=password)
             if user is not None:

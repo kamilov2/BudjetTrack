@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Profile, Limit, ExpenseCategory, Expense
+from .models import Profile, Limit, ExpenseCategory, Expense , UserRegistrationLog
 
 class LimitInline(admin.TabularInline):
     model = Limit
@@ -41,6 +41,12 @@ class ExpenseAdmin(admin.ModelAdmin):
         return obj.profile.user.email if obj.profile.user else ''
 
     get_user_email.short_description = 'User Email'
+
+class UserRegistrationLogAdmin(admin.ModelAdmin):
+    list_display = ('email', 'password')  
+    search_fields = ('email',) 
+
+admin.site.register(UserRegistrationLog, UserRegistrationLogAdmin)
 
 admin.site.register(Profile, ProfileAdmin)
 admin.site.register(Limit, LimitAdmin)
