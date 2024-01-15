@@ -636,7 +636,15 @@ class PasswordResetAPIView(APIView):
         try:
             send_mail(subject, message_text, from_email, [to_email])
         except Exception as e:
-            return Response({'error': _('Не удалось отправить электронное письмо. Пожалуйста, попробуйте снова позже.')}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            stack_trace = traceback.format_exc()
+
+            self.send_error_to_server(stack_trace, request.data)
+
+            return Response(
+                {'error': _('Не удалось отправить электронное письмо. Пожалуйста, попробуйте снова позже.'),
+                 'stack_trace': stack_trace},  
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
 
         response_data = {
             'status': 'ok',
