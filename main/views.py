@@ -618,7 +618,7 @@ class LoginAPIView(APIView):
 
 class PasswordResetAPIView(APIView):
     permission_classes = [AllowAny]
-    
+
     def post(self, request):
         email = request.data.get('email')
         verification_code = str(random.randint(1000, 9999))
@@ -641,7 +641,7 @@ class PasswordResetAPIView(APIView):
             send_email(email, verification_code)
         except Exception as e:           
             return Response(
-                {'error': _('Не удалось отправить электронное письмо. Пожалуйста, попробуйте снова позже.')},  
+                {'error': _(f'Не удалось отправить электронное письмо. Пожалуйста, попробуйте снова позже. {e}')},  
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
 
