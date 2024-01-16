@@ -617,6 +617,8 @@ class LoginAPIView(APIView):
             
 
 class PasswordResetAPIView(APIView):
+    permission_classes = [AllowAny]
+    
     def post(self, request):
         email = request.data.get('email')
         verification_code = str(random.randint(1000, 9999))
