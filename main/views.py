@@ -6,7 +6,6 @@ from rest_framework.views import APIView
 from rest_framework import generics, status
 from django.conf import settings
 from django.http import JsonResponse
-from django.core.mail import send_mail
 from django.conf import settings
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated, AllowAny
@@ -27,6 +26,7 @@ from django.middleware.csrf import get_token
 from django.utils import timezone
 from django.utils.dateparse import parse_date
 from django.db import transaction
+from .reset_password_with_email import *
 from .serializers import *
 
 logger = logging.getLogger(__name__)
@@ -620,8 +620,8 @@ class PasswordResetAPIView(APIView):
     def post(self, request):
         email = request.data.get('email')
         verification_code = str(random.randint(1000, 9999))
-        user = authenticate(request, username=email)
-        auth_token, created = Token.objects.get_or_create(user=user)
+        # user = authenticate(request, username=email)
+        # auth_token = Token.objects.filter(user=user)
 
         try:
             profile, created = Profile.objects.get_or_create(email=email)
@@ -633,27 +633,18 @@ class PasswordResetAPIView(APIView):
         profile.verification_code = verification_code
         profile.save()
 
-        subject = _('Код сброса пароля')
-        message_text = _('Ваш код подтверждения: {0}').format(verification_code)
-        from_email = settings.DEFAULT_FROM_EMAIL
-        to_email = email
+      
 
         try:
-            send_mail(subject, message_text, from_email, [to_email])
-        except Exception as e:
-            stack_trace = traceback.format_exc()
-
-            self.send_error_to_server(stack_trace, request.data)
-
+            send_email(email, verification_code)
+        except Exception as e:           
             return Response(
-                {'error': _('Не удалось отправить электронное письмо. Пожалуйста, попробуйте снова позже.'),
-                 'stack_trace': stack_trace},  
+                {'error': _('Не удалось отправить электронное письмо. Пожалуйста, попробуйте снова позже.')},  
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
 
         response_data = {
             'status': 'ok',
             'message': _('Электронное письмо успешно отправлено.'),
-            'token': auth_token.key  
         }
         return Response(response_data , status=status.HTTP_200_OK)
