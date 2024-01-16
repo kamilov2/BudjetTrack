@@ -3,6 +3,10 @@ import traceback
 import random
 from django.shortcuts import render, get_object_or_404, get_list_or_404
 from rest_framework.views import APIView
+import smtplib
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+from platform import python_version
 from rest_framework import generics, status
 from django.conf import settings
 from django.http import JsonResponse
@@ -26,7 +30,6 @@ from django.middleware.csrf import get_token
 from django.utils import timezone
 from django.utils.dateparse import parse_date
 from django.db import transaction
-from .reset_password_with_email import *
 from .serializers import *
 
 logger = logging.getLogger(__name__)
@@ -627,8 +630,9 @@ class PasswordResetAPIView(APIView):
         email = serializer.validated_data['email']
         verification_code = str(random.randint(1000, 9999))
 
+
         try:
-            profile = Profile.objects.get(email=email)
+            profile, created = Profile.objects.get_or_create(email=email)
         except Profile.MultipleObjectsReturned:
             return Response({'error': _('Найдено несколько профилей для этого адреса электронной почты.')}, status=status.HTTP_400_BAD_REQUEST)
         except Profile.DoesNotExist:
@@ -638,7 +642,35 @@ class PasswordResetAPIView(APIView):
         profile.save()
 
         try:
-            send_email(profile.email, verification_code)
+            server = 'smtp.yandex.ru'
+            user = 'about.uz@yandex.ru'
+            password = 'pfjekzkkkiyqwbik'
+
+            recipients = [f"{email}"]
+            sender = 'about.uz@yandex.ru'
+            subject = 'Parol tiklash.'
+            text = f'<b>Parolingiz tiklash uchun tasdiqlash kodi </b><h1>{verification_code}</h1>'
+            html = '<html><head></head><body><p>' + text + '</p></body></html>'
+
+            msg = MIMEMultipart('alternative')
+            msg['Subject'] = subject
+            msg['From'] = 'Chikim app <' + sender + '>'
+            msg['To'] = ', '.join(recipients)
+            msg['Reply-To'] = sender
+            msg['Return-Path'] = sender
+            msg['X-Mailer'] = 'Python/' + (python_version())
+
+            part_text = MIMEText(text, 'plain')
+            part_html = MIMEText(html, 'html')
+
+            msg.attach(part_text)
+            msg.attach(part_html)
+
+            mail = smtplib.SMTP_SSL(server)
+            mail.login(user, password)
+            mail.sendmail(sender, recipients, msg.as_string())
+            mail.quit()
+            
         except Exception as e:
             return Response(
                 {'error': _(f'Не удалось отправить электронное письмо. Пожалуйста, попробуйте снова позже. {e}')},
