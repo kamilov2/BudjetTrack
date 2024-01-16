@@ -642,12 +642,14 @@ class PasswordResetAPIView(APIView):
         profile.save()
 
         try:
-            server = 'smtp.yandex.ru'
-            user = 'about.uz@yandex.ru'
-            password = 'pfjekzkkkiyqwbik'
+            server = 'smtp.mail.ru'
+            user = 'chiqim@bk.ru'
+            password = 'kpRTh9migcjjd5McXSdA'
+
+
 
             recipients = [f"{profile.email}"]
-            sender = 'about.uz@yandex.ru'
+            sender = 'chiqim@bk.ru'
             subject = 'Parol tiklash.'
             text = f'<b>Parolingiz tiklash uchun tasdiqlash kodi </b><h1>{verification_code}</h1>'
             html = '<html><head></head><body><p>' + text + '</p></body></html>'
