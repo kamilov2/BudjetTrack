@@ -626,7 +626,7 @@ class PasswordResetAPIView(APIView):
         # auth_token = Token.objects.filter(user=user)
 
         try:
-            profile, created = Profile.objects.get_or_create(email=email)
+            profile = Profile.objects.filter(email=email)
         except Profile.MultipleObjectsReturned:
             return Response({'error': _('Найдено несколько профилей для этого адреса электронной почты.')}, status=status.HTTP_400_BAD_REQUEST)
         except Profile.DoesNotExist:
