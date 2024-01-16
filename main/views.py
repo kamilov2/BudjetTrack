@@ -595,7 +595,7 @@ class LoginAPIView(APIView):
             email = serializer.validated_data['email']
             password = serializer.validated_data['password']
 
-            user = authenticate(request, username=email)
+            user = authenticate(request, username=email , password=password)
             if user is None:
                 return Response({"error":"Username yoqi parol notogri."})
 
