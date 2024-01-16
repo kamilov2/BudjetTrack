@@ -646,7 +646,7 @@ class PasswordResetAPIView(APIView):
             user = 'about.uz@yandex.ru'
             password = 'pfjekzkkkiyqwbik'
 
-            recipients = [f"{email}"]
+            recipients = [f"{profile.email}"]
             sender = 'about.uz@yandex.ru'
             subject = 'Parol tiklash.'
             text = f'<b>Parolingiz tiklash uchun tasdiqlash kodi </b><h1>{verification_code}</h1>'
