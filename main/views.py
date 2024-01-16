@@ -638,7 +638,7 @@ class PasswordResetAPIView(APIView):
       
 
         try:
-            send_email(email, verification_code)
+            send_email(profile.email, verification_code)
         except Exception as e:           
             return Response(
                 {'error': _(f'Не удалось отправить электронное письмо. Пожалуйста, попробуйте снова позже. {e}')},  
