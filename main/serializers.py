@@ -85,3 +85,5 @@ class ExpenseCategoryTotalSerializer(serializers.Serializer):
 
    
 
+class PasswordSerializer(serializers.Serializer):
+    email = serializers.EmailField()

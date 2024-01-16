@@ -620,10 +620,12 @@ class PasswordResetAPIView(APIView):
     permission_classes = [AllowAny]
 
     def post(self, request):
-        email = request.data.get('email')
+        serializer = PasswordSerializer(data=request.data)
+        if not serializer.is_valid():
+            return Response({'error': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+
+        email = serializer.validated_data['email']
         verification_code = str(random.randint(1000, 9999))
-        # user = authenticate(request, username=email)
-        # auth_token = Token.objects.filter(user=user)
 
         try:
             profile = Profile.objects.get(email=email)
@@ -635,13 +637,11 @@ class PasswordResetAPIView(APIView):
         profile.verification_code = verification_code
         profile.save()
 
-      
-
         try:
             send_email(profile.email, verification_code)
-        except Exception as e:           
+        except Exception as e:
             return Response(
-                {'error': _(f'Не удалось отправить электронное письмо. Пожалуйста, попробуйте снова позже. {e}')},  
+                {'error': _(f'Не удалось отправить электронное письмо. Пожалуйста, попробуйте снова позже. {e}')},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
 
@@ -649,4 +649,4 @@ class PasswordResetAPIView(APIView):
             'status': 'ok',
             'message': _('Электронное письмо успешно отправлено.'),
         }
-        return Response(response_data , status=status.HTTP_200_OK)
+        return Response(response_data, status=status.HTTP_200_OK)
