@@ -22,6 +22,7 @@ from django.contrib.auth import authenticate, login, logout
 from drf_yasg import openapi
 from django.contrib.auth import update_session_auth_hash
 from django.db.models import Sum
+from django.contrib.auth.models import User
 from datetime import datetime
 from django.db.models import Count
 from django.utils import timezone
@@ -632,7 +633,7 @@ class PasswordResetAPIView(APIView):
 
 
         try:
-            profile, created = Profile.objects.get_or_create(email=email)
+            profile = Profile.objects.get(email=email)
         except Profile.MultipleObjectsReturned:
             return Response({'error': _('Найдено несколько профилей для этого адреса электронной почты.')}, status=status.HTTP_400_BAD_REQUEST)
         except Profile.DoesNotExist:
@@ -642,6 +643,7 @@ class PasswordResetAPIView(APIView):
         profile.save()
 
         try:
+            print(profile.email)
             server = 'smtp.mail.ru'
             user = 'chiqim@bk.ru'
             password = 'kpRTh9migcjjd5McXSdA'
